@@ -1,0 +1,13 @@
+[
+  "event ItemCreated(uint256 indexed itemId, address indexed nftContract, uint256 indexed tokenId, address seller, address owner, uint256 price, uint256 distributionPrice, bool sold)",
+  "event OwnerAdded(address owner, uint256 tokenId, address[] owners)",
+  "function addNFTToMarket(address nftContract, uint256 tokenId)",
+  "function addOwner(uint256 tokenId) payable",
+  "function createItem(address nftContract, uint256 tokenId, uint256 distributionPrice, uint256 price) payable",
+  "function fetchItems() view returns (tuple[])",
+  "function fetchItemsCreated() view returns (tuple[])",
+  "function fetchNFTs() view returns (tuple[])",
+  "function getNFTFraction(uint256 itemId) payable",
+  "function sellItem(address nftContract, uint256 itemId) payable",
+  "function sellNFT(address nftContract, uint256 tokenId) payable"
+]
