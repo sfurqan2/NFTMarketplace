@@ -16,15 +16,15 @@ function App() {
         <nav>
 
           <h1>NFT Marketplace</h1>
-          <ul className="flex w-64 justify-around py-5">
+          <ul className="flex w-96 justify-around py-5">
             <li>
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/create-item">About</Link>
+              <Link to="/create-item">Add Item to Marketplace</Link>
             </li>
             <li>
-              <Link to="/profile">Users</Link>
+              <Link to="/profile">Profile</Link>
             </li>
           </ul>
         </nav>
