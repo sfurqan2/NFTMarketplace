@@ -1,6 +1,0 @@
-[
-  "event OwnerAdded(address owner, uint256 tokenId, address[] owners)",
-  "function addNFTToMarket(address nftContract, uint256 tokenId)",
-  "function addOwner(uint256 tokenId) payable",
-  "function sellNFT(address nftContract, uint256 tokenId) payable"
-]

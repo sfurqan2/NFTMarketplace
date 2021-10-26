@@ -2,10 +2,9 @@
 
 pragma solidity ^0.8.0;
 
-import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract NFTFractionsManager {
-
     event OwnerAdded(address owner, uint256 tokenId, address[] owners);
 
     mapping(uint256 => address[]) private tokenToPartialOwners;
@@ -37,11 +36,22 @@ contract NFTFractionsManager {
 
         uint256 pricePerShare = msg.value / ownerCount;
 
-        for(uint256 i = 0; i < ownerCount - 1; i++){
+        for (uint256 i = 0; i < ownerCount - 1; i++) {
             address payable owner = payable(owners[i]);
             owner.transfer(pricePerShare);
+            owners[i] = address(0);
         }
 
         IERC721(nftContract).transferFrom(address(this), msg.sender, tokenId);
+        tokenToPartialOwnerCount[tokenId] = 0;
+        tokenToOwner[tokenId] = msg.sender;
+    }
+
+    function getOwners(uint256 tokenId) public view returns (address[] memory) {
+        return tokenToPartialOwners[tokenId];
+    }
+
+    function getOwnerCount(uint256 tokenId) public view returns(uint256) {
+        return tokenToPartialOwnerCount[tokenId];
     }
 }

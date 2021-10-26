@@ -12,19 +12,19 @@ function App() {
   
   return (
     <Router>
-      <div>
-        <nav>
+      <div className="container max-w-xl sm:max-w-2xl md:max-w-4xl xl:max-w-7xl m-auto min-h-screen flex flex-col">
+        <nav className="flex justify-between items-center">
 
-          <h1>NFT Marketplace</h1>
+          <h1 className="text-2xl font-semibold">NFT Marketplace</h1>
           <ul className="flex w-96 justify-around py-5">
             <li>
-              <Link to="/">Home</Link>
+              <Link to="/" className="text-blue-400 hover:text-blue-600 transition-colors">Home</Link>
             </li>
             <li>
-              <Link to="/create-item">Add Item to Marketplace</Link>
+              <Link to="/create-item" className="text-blue-400 hover:text-blue-600 transition-colors">Add Item to Marketplace</Link>
             </li>
             <li>
-              <Link to="/profile">Profile</Link>
+              <Link to="/profile" className="text-blue-400 hover:text-blue-600 transition-colors">Profile</Link>
             </li>
           </ul>
         </nav>

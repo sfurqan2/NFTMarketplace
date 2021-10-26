@@ -40,12 +40,8 @@ function getChainConfig(network) {
 }
 
 const config = {
-  abiExporter: {
-    path: './src/abi',
-    clear: true,
-    flat: true,
-    spacing: 2,
-    pretty: true,
+  paths: {
+    artifacts: './src/artifacts',
   },
   defaultNetwork: "hardhat",
   networks: {

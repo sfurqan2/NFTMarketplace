@@ -8,6 +8,7 @@ import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
 import './NFTFractionsManager.sol';
 
 contract NFTMarketplace is NFTFractionsManager, ReentrancyGuard {
+    
     using Counters for Counters.Counter;
     Counters.Counter private _itemsIds;
     Counters.Counter private _itemsSold;

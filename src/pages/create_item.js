@@ -6,8 +6,8 @@ import { useHistory } from "react-router-dom";
 
 import { nftaddress, nftmarketaddress } from "../config";
 
-import NFT from '../abi/NFT.json';
-import Market from '../abi/NFTMarketplace.json';
+import {abi as NFT} from "../artifacts/contracts/NFT.sol/NFT.json";
+import {abi as Market} from "../artifacts/contracts/NFTMarketplace.sol/NFTMarketplace.json";
 
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
 
@@ -15,10 +15,12 @@ const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
 const CreateItem = () => {
 
     const [fileURL, setFileURL] = useState("");
+    const [fileLoading, setFileLoading] = useState(false);
     const [formInput, setFormInput] = useState({ name: "", price: "", description: "", distributionPrice: ""})
     let history = useHistory();
 
     async function onChange(e){
+        setFileLoading(true);
         const file = e.target.files[0];
         try{
             const added = await client.add(
@@ -29,7 +31,7 @@ const CreateItem = () => {
 
             const url = `https://ipfs.infura.io/ipfs/${added.path}`;
             setFileURL(url);
-
+            setFileLoading(false);
         }catch(e){
             console.error(e);
         }
@@ -83,31 +85,38 @@ const CreateItem = () => {
     }
 
     return(
-        <div>
-            <div>
-                <label>NFT Name</label>
-                <input type="text" onChange={e => setFormInput({...formInput, name: e.target.value})} required/>
-            </div>
-            <div>
-                <label>NFT Description</label>
-                <textarea  onChange={e => setFormInput({...formInput, description: e.target.value})} required></textarea>
-            </div>
-            <div>
-                <label>NFT Fraction Price</label>
-                <input type="text"  onChange={e => setFormInput({...formInput, distributionPrice: e.target.value})} required/>
-            </div>
-            <div>
-                <label>NFT Selling Price</label>
-                <input type="text" onChange={e => setFormInput({...formInput, price: e.target.value})} required/>
-            </div>
-            <div>
-                <input type="file" onChange={onChange} required />
-            </div>
+        <div className="flex-1 flex items-center">
+            <div className="border shadow rounded mt-2 mx-auto max-w-lg w-full">
+                <div className="p-5 border-b">
+                    <h1 className="text-xl font-semibold">Add NFT to Marketplace</h1>
+                </div>
+                <div className="p-5">
+                    <div className="flex items-center">
+                        <label className="w-40">NFT Name</label>
+                        <input className="flex-1" type="text" onChange={e => setFormInput({...formInput, name: e.target.value})} required/>
+                    </div>
+                    <div className="flex items-center mt-2">
+                        <label className="w-40">NFT Description</label>
+                        <textarea className="flex-1" onChange={e => setFormInput({...formInput, description: e.target.value})} required></textarea>
+                    </div>
+                    <div className="flex items-center mt-2">
+                        <label className="w-40">NFT Fraction Price</label>
+                        <input className="flex-1" type="text"  onChange={e => setFormInput({...formInput, distributionPrice: e.target.value})} required/>
+                    </div>
+                    <div className="flex items-center mt-2">
+                        <label className="w-40">NFT Selling Price</label>
+                        <input className="flex-1" type="text" onChange={e => setFormInput({...formInput, price: e.target.value})} required/>
+                    </div>
+                    <div className="mt-2">
+                        <input type="file" onChange={onChange} required />
+                    </div>
 
-            { fileURL && (<img width="350" alt="NFT" src={fileURL} /> ) }
+                    { (fileLoading ? <img width="350" height="300" className="contain m-auto bg-gray-100 mt-2" alt="Loading" src="https://i.pinimg.com/originals/d7/34/49/d73449313ecedb997822efecd1ee3eac.gif"/> : <img width="350" height="300" className="contain m-auto bg-gray-100 mt-2" alt="NFT" src={fileURL ? fileURL: "https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png?w=640"} />)  }
 
-            <div>
-                <button type="button" onClick={createItem}>Add NFT to Marketplace</button>
+                    <div className="mt-2">
+                        <button type="button" onClick={createItem} className="w-full px-4 py-3 bg-green-600 text-white">Add NFT to Marketplace</button>
+                    </div>
+                </div>
             </div>
         </div>
     )
