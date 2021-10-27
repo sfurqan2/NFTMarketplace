@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 
 import { nftaddress, nftmarketaddress } from "../config";
 
-import {abi as NFT} from "../artifacts/contracts/NFT.sol/NFT.json";
-import {abi as Market} from "../artifacts/contracts/NFTMarketplace.sol/NFTMarketplace.json";
+import { abi as NFT } from "../artifacts/contracts/NFT.sol/NFT.json";
+import { abi as Market } from "../artifacts/contracts/NFTMarketplace.sol/NFTMarketplace.json";
 // import FractionsManager from './abi/NFTFractionsManager.json';
 
 const Home = () => {
@@ -49,6 +49,7 @@ const Home = () => {
           name: meta.data.name,
           description: meta.data.description,
           ownerCount: await getItemOwnersCount(i),
+          owners: await getItemPartialOwners(i),
         };
 
         return item;
@@ -69,6 +70,20 @@ const Home = () => {
     // const fractionsManagerContract = new ethers.Contract(nftfractionsmanager, FractionsManager.abi, provider);
 
     const result = await marketContract.getOwnerCount(item.tokenId);
+
+    return result;
+  }
+
+  async function getItemPartialOwners(item) {
+    const provider = new ethers.providers.JsonRpcProvider();
+    const marketContract = new ethers.Contract(
+      nftmarketaddress,
+      Market,
+      provider
+    );
+    // const fractionsManagerContract = new ethers.Contract(nftfractionsmanager, FractionsManager.abi, provider);
+
+    const result = await marketContract.getPartialOwners(item.tokenId);
 
     return result;
   }
@@ -121,14 +136,14 @@ const Home = () => {
       ) : (
         <div className="self-start mt-5">
           <p className="text-xl font-semibold text-green-600">NFTs for sale</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 mt-5 gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2  mt-5 gap-10">
             {nfts.map((item, key) => (
               <div key={key} className="p-5 border shadow rounded-md">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p>{item.name}</p>
-                    <p>{item.description}</p>
-                  </div>
+                  <dd>
+                    <dt className="text-xl font-semibold text-blue-700">{item.name}</dt>
+                    <dd>{item.description}</dd>
+                  </dd>
                   <div>
                     <p className="text-green-700">
                       {"Price: " + item.price + " Eth"}
@@ -138,6 +153,12 @@ const Home = () => {
                     </p>
                   </div>
                 </div>
+                <p className="mt-2">{"Owner: " + item.owner}</p>
+                {item.owners.length > 1 ? <h1 className="font-semibold mt-2">Partial Owners</h1> : null}
+                {item.owners.map((owner, key) => {
+                  if (item.owner === owner) return null;
+                  return <p key={key}>{owner}</p>;
+                })}
                 <img
                   alt={"NFT " + key + 1}
                   src={item.image}

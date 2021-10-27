@@ -13,9 +13,6 @@
 
 .env
 
-/src/artifacts
-/src/abi
-/cache
 
 # misc
 .DS_Store
@@ -27,3 +24,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+/cache
+src/artifacts

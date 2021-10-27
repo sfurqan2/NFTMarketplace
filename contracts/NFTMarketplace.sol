@@ -74,7 +74,7 @@ contract NFTMarketplace is NFTFractionsManager, ReentrancyGuard {
     function getNFTFraction(uint256 itemId) public payable nonReentrant {
         require(idToItem[itemId].distributionPrice == msg.value, "Please match the amount required to get the share");
 
-        addOwner(idToItem[itemId].tokenId);
+        addPartialOwner(idToItem[itemId].tokenId);
     }
 
     function sellItem(address nftContract, uint256 itemId) public payable nonReentrant{

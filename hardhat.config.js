@@ -1,5 +1,4 @@
 require("@nomiclabs/hardhat-waffle");
-require('hardhat-abi-exporter');
 
 const { resolve } = require("path");
 
@@ -31,7 +30,7 @@ function getChainConfig(network) {
   const url = "https://" + network + ".infura.io/v3/" + infuraApiKey;
   return {
     accounts: {
-      count: 10,
+      count: 5,
       mnemonic,
     },
     chainId: chainIds[network],

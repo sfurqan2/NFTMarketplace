@@ -11,7 +11,7 @@ contract NFTFractionsManager {
     mapping(uint256 => uint256) private tokenToPartialOwnerCount;
     mapping(uint256 => address) private tokenToOwner;
 
-    function addOwner(uint256 tokenId) public payable {
+    function addPartialOwner(uint256 tokenId) public payable {
         address payable owner = payable(tokenToOwner[tokenId]);
         owner.transfer(msg.value);
 
@@ -43,7 +43,7 @@ contract NFTFractionsManager {
         }
 
         IERC721(nftContract).transferFrom(address(this), msg.sender, tokenId);
-        tokenToPartialOwnerCount[tokenId] = 0;
+        tokenToPartialOwnerCount[tokenId] = 1;
         tokenToOwner[tokenId] = msg.sender;
     }
 
