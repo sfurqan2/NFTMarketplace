@@ -32,11 +32,11 @@ contract NFTFractionsManager {
 
     function sellNFT(address nftContract, uint256 tokenId) public payable {
         address[] memory owners = tokenToPartialOwners[tokenId];
-        uint256 ownerCount = tokenToPartialOwnerCount[tokenId] + 1;
+        uint256 ownerCount = tokenToPartialOwnerCount[tokenId];
 
         uint256 pricePerShare = msg.value / ownerCount;
 
-        for (uint256 i = 0; i < ownerCount - 1; i++) {
+        for (uint256 i = 0; i < ownerCount; i++) {
             address payable owner = payable(owners[i]);
             owner.transfer(pricePerShare);
             owners[i] = address(0);
@@ -47,11 +47,11 @@ contract NFTFractionsManager {
         tokenToOwner[tokenId] = msg.sender;
     }
 
-    function getOwners(uint256 tokenId) public view returns (address[] memory) {
+    function getPartialOwners(uint256 tokenId) external view returns (address[] memory) {
         return tokenToPartialOwners[tokenId];
     }
 
-    function getOwnerCount(uint256 tokenId) public view returns(uint256) {
+    function getOwnerCount(uint256 tokenId) external view returns(uint256) {
         return tokenToPartialOwnerCount[tokenId];
     }
 }

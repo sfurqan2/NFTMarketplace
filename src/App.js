@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -6,10 +6,22 @@ import {
   Link
 } from "react-router-dom";
 
-import { CreateItem, Home, Profile } from "./pages";
+import { CreateItem, Home, Profile, History } from "./pages";
 
 function App() {
+  const [addr, setAddr] = useState("");
+  const ethereum = window.ethereum;
   
+  if(ethereum){
+    ethereum.on('accountsChanged', (accounts) => {
+      setAddr(accounts[0]);
+    })
+  }
+
+  useEffect(() => {
+    if(!addr) setAddr(ethereum.selectedAddress);
+  }, []);
+
   return (
     <Router>
       <div className="container max-w-xl sm:max-w-2xl md:max-w-4xl xl:max-w-7xl m-auto min-h-screen flex flex-col">
@@ -26,19 +38,25 @@ function App() {
             <li>
               <Link to="/profile" className="text-blue-400 hover:text-blue-600 transition-colors">Profile</Link>
             </li>
+            <li>
+              <Link to="/history" className="text-blue-400 hover:text-blue-600 transition-colors">History</Link>
+            </li>
           </ul>
         </nav>
 
         
         <Switch>
+          <Route path="/history">
+            <History address={addr} />
+          </Route>
           <Route path="/create-item">
-            <CreateItem />
+            <CreateItem address={addr} />
           </Route>
           <Route path="/profile">
-            <Profile />
+            <Profile address={addr} />
           </Route>
           <Route path="/">
-            <Home />
+            <Home address={addr} />
           </Route>
         </Switch>
       </div>

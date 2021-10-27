@@ -1,5 +1,5 @@
-import CreateItem from "./create_item";
-import Home from "./home";
-import Profile from "./profile";
-
-export {Home, CreateItem, Profile};
+import CreateItem from "./CreateItem";
+import Home from "./Home";
+import Profile from "./Profile";
+import History from "./History";
+export {Home, CreateItem, Profile, History};

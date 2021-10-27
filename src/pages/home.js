@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import axios from "axios";
 import Web3Modal from "web3modal";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { nftaddress, nftmarketaddress } from "../config";
 
@@ -9,7 +9,7 @@ import { abi as NFT } from "../artifacts/contracts/NFT.sol/NFT.json";
 import { abi as Market } from "../artifacts/contracts/NFTMarketplace.sol/NFTMarketplace.json";
 // import FractionsManager from './abi/NFTFractionsManager.json';
 
-const Home = () => {
+const Home = ({address}) => {
   const [nfts, setNfts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -18,7 +18,7 @@ const Home = () => {
   }, []);
 
   async function loadNFTs() {
-    const provider = new ethers.providers.JsonRpcProvider();
+    let provider = new ethers.providers.JsonRpcProvider();
     const nftContract = new ethers.Contract(nftaddress, NFT, provider);
     const marketContract = new ethers.Contract(
       nftmarketaddress,
@@ -44,18 +44,15 @@ const Home = () => {
           tokenId: i.tokenId.toNumber(),
           distributionPrice,
           seller: i.seller,
-          owner: i.owner,
           image: meta.data.image,
           name: meta.data.name,
           description: meta.data.description,
           ownerCount: await getItemOwnersCount(i),
           owners: await getItemPartialOwners(i),
         };
-
         return item;
       })
     );
-
     setNfts(items);
     setLoading(false);
   }
@@ -140,10 +137,12 @@ const Home = () => {
             {nfts.map((item, key) => (
               <div key={key} className="p-5 border shadow rounded-md">
                 <div className="flex items-center justify-between">
-                  <dd>
-                    <dt className="text-xl font-semibold text-blue-700">{item.name}</dt>
+                  <dl>
+                    <dt className="text-xl font-semibold text-blue-700">
+                      {item.name}
+                    </dt>
                     <dd>{item.description}</dd>
-                  </dd>
+                  </dl>
                   <div>
                     <p className="text-green-700">
                       {"Price: " + item.price + " Eth"}
@@ -153,10 +152,12 @@ const Home = () => {
                     </p>
                   </div>
                 </div>
-                <p className="mt-2">{"Owner: " + item.owner}</p>
-                {item.owners.length > 1 ? <h1 className="font-semibold mt-2">Partial Owners</h1> : null}
+                <div className="flex justify-between items-center mt-2 font-semibold">
+                  <p className="">Partial Owners</p>
+                  <p>{item.ownerCount.toString()}</p>
+                </div>
+                
                 {item.owners.map((owner, key) => {
-                  if (item.owner === owner) return null;
                   return <p key={key}>{owner}</p>;
                 })}
                 <img
@@ -164,23 +165,21 @@ const Home = () => {
                   src={item.image}
                   className="rounded mt-2 w-full"
                 />
-                <div className="flex justify-between mt-2 items-center">
-                  <p className="mt-2">{"Partial Owners: " + item.ownerCount}</p>
-                  <div className="flex justify-end mt-2 items-center">
-                    <button
-                      className="px-4 py-3 bg-green-400 text-white ml-2 rounded-3xl hover:bg-green-500 transition-colors"
-                      onClick={() => buyFraction(item)}
-                    >
-                      Buy Fraction
-                    </button>
-                    <button
-                      className="px-4 py-3 bg-green-400 text-white ml-2 rounded-3xl hover:bg-green-500 transition-colors"
-                      onClick={() => buyNFT(item)}
-                    >
-                      Buy Now
-                    </button>
-                  </div>
-                </div>
+                {
+                  item.seller !== address && !item.owners.some(value => value.toLowerCase() === address) ? (<div className="flex justify-end mt-2 items-center">
+                  <button
+                    className="px-4 py-3 bg-green-400 text-white ml-2 rounded-3xl hover:bg-green-500 transition-colors"
+                    onClick={() => buyFraction(item)}
+                  >
+                    Buy Fraction
+                  </button>
+                  <button
+                    className="px-4 py-3 bg-green-400 text-white ml-2 rounded-3xl hover:bg-green-500 transition-colors"
+                    onClick={() => buyNFT(item)}
+                  >
+                    Buy Now
+                  </button>
+                </div> ): null}
               </div>
             ))}
           </div>
