@@ -19,8 +19,8 @@ contract NFTMarketplace is NFTFractionsManager, ReentrancyGuard {
         uint itemId;
         address NFTContract;
         uint256 tokenId;
-        address payable owner;
         address payable seller;
+        address payable owner;
         uint256 price;
         uint256 distributionPrice;
         bool sold;
@@ -92,7 +92,7 @@ contract NFTMarketplace is NFTFractionsManager, ReentrancyGuard {
 
     }
 
-    function fetchItems() public view returns(Item[] memory) {
+    function fetchItems() external view returns(Item[] memory) {
         uint itemCount = _itemsIds.current();
         uint unsoldItemCount = itemCount - _itemsSold.current();
         uint index = 0;
@@ -109,7 +109,7 @@ contract NFTMarketplace is NFTFractionsManager, ReentrancyGuard {
         return items;
     }
 
-    function fetchNFTs() public view returns(Item[] memory){
+    function fetchNFTs() external view returns(Item[] memory){
         uint totalItemCount = _itemsIds.current();
         uint itemCount = 0;
         uint index = 0;
@@ -133,7 +133,7 @@ contract NFTMarketplace is NFTFractionsManager, ReentrancyGuard {
         return items;
     }
 
-    function fetchItemsCreated() public view returns(Item[] memory){
+    function fetchItemsCreated() external view returns(Item[] memory){
         uint totalItemCount = _itemsIds.current();
         uint itemCount = 0;
         uint index = 0;
